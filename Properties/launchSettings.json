@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LayoutBugs (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "LayoutBugs (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

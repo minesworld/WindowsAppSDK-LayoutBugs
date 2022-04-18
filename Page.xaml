@@ -1,0 +1,270 @@
+﻿<Page
+    x:Class="LayoutBugs.Page"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:LayoutBugs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="using:System"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+
+        <DataTemplate x:Key="TopAllignedTextBlockFixedText"
+                      x:DataType="local:Item"
+                      x:DefaultBindMode="OneWay">
+
+            <Border Background="AliceBlue"
+                    BorderBrush="DarkBlue"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                <TextBlock Text="- X -" />
+            </Border>
+        </DataTemplate>
+
+        <!-- Alligned TextBoxes -->
+
+        <DataTemplate x:Key="LeftAllignedTextBoxWithHorizontalLinesText" 
+                      x:DataType="local:Item"
+                      x:DefaultBindMode="OneWay">
+
+            <Border Background="AliceBlue"
+                    BorderBrush="DarkBlue"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                <TextBlock Text="{x:Bind HorizontalLinesText}" />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TopAllignedTextBoxWithVerticalLinesText" 
+                      x:DataType="local:Item"
+                      x:DefaultBindMode="OneWay">
+
+            <Border Background="AliceBlue"
+                    BorderBrush="DarkBlue"
+                    BorderThickness="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                <TextBlock Text="{x:Bind VerticalLinesText}" />
+            </Border>
+        </DataTemplate>
+        
+        <!-- Stetch Alligned Grids -->
+
+        <DataTemplate x:Key="StretchAllignedGridTextBoxWithHorizontalLinesText" 
+                      x:DataType="local:Item"
+                      x:DefaultBindMode="OneWay">
+            <Grid Background="Aqua"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0"
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="1">
+                    <TextBlock Text="{x:Bind HorizontalLinesText}" />
+                </Border>
+            </Grid>
+
+        </DataTemplate>
+
+        <DataTemplate x:Key="StretchAllignedGridTextBoxWithVerticalLinesText" 
+                      x:DataType="local:Item"
+                      x:DefaultBindMode="OneWay">
+            <Grid Background="Aqua"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0"
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="1">
+                    <TextBlock Text="{x:Bind VerticalLinesText}" />
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <!-- DATATEMPLATE SELCTOR -->
+
+        <local:DataTemplateByTextSelector x:Key="ByTextSelector"
+            TopAllignedTextBlockFixedText="{StaticResource TopAllignedTextBlockFixedText}"
+            LeftAllignedTextBoxWithHorizontalLinesText="{StaticResource LeftAllignedTextBoxWithHorizontalLinesText}"
+            StretchAllignedGridTextBoxWithHorizontalLinesText="{StaticResource StretchAllignedGridTextBoxWithHorizontalLinesText}"
+            TopAllignedTextBoxWithVerticalLinesText="{StaticResource TopAllignedTextBoxWithVerticalLinesText}"
+            StretchAllignedGridTextBoxWithVerticalLinesText="{StaticResource StretchAllignedGridTextBoxWithVerticalLinesText}" />
+ 
+    </Page.Resources>
+
+    <Grid Background="White"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- SETTINGS -->
+
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal">
+            <NumberBox Margin="4,4,8,4" Header="Items Count:" Value="{x:Bind NumberOfItems, Mode=TwoWay}"/>
+            <NumberBox Margin="8,4,8,4" Header="Max. Numbers per Item:" Value="{x:Bind MaxLinesPerItem, Mode=TwoWay}"/>
+            <ComboBox Margin="8,4,8,4" Header="DataTemplate" SelectedValue="{x:Bind DataTemplateText, Mode=TwoWay}" PlaceholderText="Pick a DataTemplate">
+                <x:String>TopAllignedTextBlockFixedText</x:String>
+                <x:String>LeftAllignedTextBoxWithHorizontalLinesText</x:String>
+                <x:String>StretchAllignedGridTextBoxWithHorizontalLinesText</x:String>
+                <x:String>TopAllignedTextBoxWithVerticalLinesText</x:String>
+                <x:String>StretchAllignedGridTextBoxWithVerticalLinesText</x:String>
+            </ComboBox>
+            <NumberBox Margin="8,4,8,4" Header="Item Actions:" Value="{x:Bind RandomItemsActions, Mode=TwoWay}"/>
+            <Button Margin="0,4,8,4" Content="Perform Actions" Click="OnRandomItemsActionsClick" VerticalAlignment="Bottom"/>
+            <Button Margin="8,4,8,4" Content="Reset Scroll Positions" Click="OnResetScrollPositions" VerticalAlignment="Bottom"/>
+            <CheckBox Margin="8,4,8,4" Content="Enforce ListView.UpdateLayout()" IsChecked="{x:Bind EnforceListViewsUpdateLayout, Mode=TwoWay}" VerticalAlignment="Bottom"/>
+        </StackPanel>
+        
+        <!-- VERTICAL AND HORIZONTLAL ITEMS VIEWER -->
+
+        <Grid Grid.Row="1" 
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- HORIZONTAL ITEMS IN VERTICAL LAYOUT -->
+
+            <Border Grid.Column="0" Grid.Row="0"
+                Background="Beige">
+                <TextBlock Text="Vertical ItemsRepeater in ScrollView" HorizontalAlignment="Center" FontSize="20"/>
+            </Border>
+            <ScrollViewer x:Name="VerticalItemsRepeatersScrollViewer" 
+                Grid.Column="0" Grid.Row="1"
+                Margin="4,4,4,4" 
+                      Background="Beige"
+                      
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"                      
+                       
+                      HorizontalContentAlignment="Left"
+                      VerticalContentAlignment="Top"
+                      
+                      HorizontalScrollBarVisibility="Auto"
+                      HorizontalScrollMode="Enabled"
+                          
+                      VerticalScrollBarVisibility="Visible"
+                      VerticalScrollMode="Enabled">
+
+                <ItemsRepeater ItemsSource="{x:Bind Items, Mode=OneWay}"
+                               ItemTemplate="{StaticResource ByTextSelector}">
+                </ItemsRepeater>
+            </ScrollViewer>
+
+            <!-- -->
+
+            <Border Grid.Column="0" Grid.Row="2" 
+                Background="WhiteSmoke">
+                <TextBlock Text="Vertical ListView" HorizontalAlignment="Center" FontSize="20"/>
+            </Border>
+            <ListView x:Name="VerticalListView"  
+                Grid.Column="0" Grid.Row="3"
+                      Margin="4,4,4,4" 
+                      Background="WhiteSmoke"
+                  
+                      HorizontalAlignment="Stretch"                  
+                      VerticalAlignment="Stretch"
+
+                      HorizontalContentAlignment="Left"
+                      VerticalContentAlignment="Top"
+                   
+                      ItemsSource="{x:Bind Items, Mode=OneWay}"
+                      ItemTemplateSelector="{StaticResource ByTextSelector}"
+                  
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollMode="Enabled"
+                          
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.VerticalScrollMode="Enabled">
+            </ListView>
+
+            <!-- VERTICAL ITEMS IN HORIZONTAL LAYOUT -->
+
+            <Border Grid.Column="1" Grid.Row="0" 
+                Background="Beige">
+                <TextBlock Text="Horizontal ItemsRepeater in ScrollView" HorizontalAlignment="Center" FontSize="20"/>
+            </Border>
+            <ScrollViewer x:Name="HorizontalItemsRepeatersScrollViewer"  
+                Grid.Column="1" Grid.Row="1"
+                          Margin="4,4,4,4" 
+                          Background="Beige"
+                      
+                          VerticalAlignment="Stretch"                      
+                          HorizontalAlignment="Stretch"
+                      
+                          HorizontalScrollBarVisibility="Visible"
+                          HorizontalScrollMode="Enabled"
+                          
+                          VerticalScrollBarVisibility="Auto"
+                          VerticalScrollMode="Enabled">
+
+                <ItemsRepeater ItemsSource="{x:Bind Items, Mode=OneWay}"
+                               ItemTemplate="{StaticResource ByTextSelector}">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Orientation="Horizontal"/>
+                    </ItemsRepeater.Layout>
+                </ItemsRepeater>
+            </ScrollViewer>
+
+            <!-- -->
+
+            <Border Grid.Column="1" Grid.Row="2" 
+                Background="WhiteSmoke">
+                <TextBlock Text="Horizontal ListView" HorizontalAlignment="Center" FontSize="20"/>
+            </Border>
+            <ListView x:Name="HorizontalListView"
+                      Grid.Column="1" Grid.Row="3"
+                      Margin="4,4,4,4" 
+                      Background="WhiteSmoke"
+                  
+                      VerticalAlignment="Stretch"
+                      VerticalContentAlignment="Stretch"
+
+                      HorizontalAlignment="Stretch"                  
+                   
+                      ItemsSource="{x:Bind Items, Mode=OneWay}"
+                      ItemTemplateSelector="{StaticResource ByTextSelector}"
+                  
+                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollMode="Enabled"
+                      
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollMode="Enabled">
+
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Horizontal" 
+                                         VerticalAlignment="Top"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+
+            </ListView>
+        </Grid>
+
+    </Grid>
+
+</Page>
