@@ -70,9 +70,10 @@ The Textblock has a "AliceBlue" background and a "DarkBlue" 1 pixel thick border
 - **non touching "DarkBlue" borders in the ItemRepeater views**
 
 **Findings (Microsoft.WindowsAppSDK 1.0.0)**
-- only the "TopAllignedTextBlockFixedText" is shown correctly ALL four ways
-- all other DataTemplates will be shown differently between the ItemsRepeater and ScrollView
+- only the "TopAllignedTextBlockFixedText" is shown correctly ALL four ways on EVERY "Items Count" value
+- all other DataTemplates will be shown differently between the ItemsRepeater and ScrollView if the Layout needs to be scrolled
 - there will be layout errors where items
   + are not attached to a side
   + have the wrong spacing between them
 - **the Horizontal ListView will NEVER display items with a different height top alligned - its always centered.**
+
